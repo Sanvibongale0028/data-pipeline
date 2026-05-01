@@ -7,6 +7,22 @@ pipeline {
 
     stages {
 
+        // stage('Setup Environment') {
+        //     steps {
+        //         sh '''
+        //         echo "🔧 Setting up environment..."
+
+        //         if [ ! -d "$VENV" ]; then
+        //             python3 -m venv $VENV
+        //         fi
+
+        //         . $VENV/bin/activate
+        //         pip install --upgrade pip
+        //         pip install --no-cache-dir --default-timeout=100 -r requirements.txt
+        //         '''
+        //     }
+        // }
+
         stage('Setup Environment') {
             steps {
                 sh '''
@@ -17,12 +33,18 @@ pipeline {
                 fi
 
                 . $VENV/bin/activate
+
                 pip install --upgrade pip
-                pip install --no-cache-dir --default-timeout=100 -r requirements.txt
+
+                for i in 1 2 3
+                do
+                    pip install --no-cache-dir --default-timeout=100 -r requirements.txt && break
+                    echo "⚠️ Retry $i failed, retrying..."
+                    sleep 5
+                done
                 '''
             }
         }
-
         stage('Fetch Data') {
             steps {
                 sh '''
