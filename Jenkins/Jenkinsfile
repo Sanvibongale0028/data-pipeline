@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+    environment {
+        VENV = "venv"
+    }
+
+    stages {
+
+        stage('Setup Environment') {
+            steps {
+                sh '''
+                echo "🔧 Setting up environment..."
+
+                if [ ! -d "$VENV" ]; then
+                    python3 -m venv $VENV
+                fi
+
+                . $VENV/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
+                '''
+            }
+        }
+
+        stage('Fetch Data') {
+            steps {
+                sh '''
+                echo "🚀 Fetching data..."
+                . $VENV/bin/activate
+                python scripts/fetch_data.py
+                '''
+            }
+        }
+
+        stage('Detect Change') {
+            steps {
+                script {
+                    echo "🔍 Detecting change..."
+
+                    def status = sh(
+                        script: '''
+                        . venv/bin/activate
+                        python scripts/detect_and_trigger.py
+                        ''',
+                        returnStatus: true
+                    )
+
+                    if (status != 0) {
+                        echo "😴 No change detected → stopping pipeline"
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }
+
+                    echo "🚀 Change detected → continuing pipeline"
+                }
+            }
+        }
+
+        stage('Append Raw Data') {
+            steps {
+                sh '''
+                echo "📥 Appending raw data..."
+                . $VENV/bin/activate
+                python scripts/append_raw.py
+                '''
+            }
+        }
+
+        stage('Preprocess Data') {
+            steps {
+                sh '''
+                echo "⚙️ Preprocessing data..."
+                . $VENV/bin/activate
+                python scripts/preprocess.py
+                '''
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline completed successfully'
+        }
+        failure {
+            echo '❌ Pipeline failed'
+        }
+        always {
+            echo '📌 Pipeline execution finished'
+        }
+    }
+}
