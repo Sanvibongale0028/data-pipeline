@@ -1,122 +1,132 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// import { useState } from "react";
+// import "./App.css";
+
+// import RawTable from "./components/RawTable";
+// import ProcessedTable from "./components/ProcessedTable";
+// import SummaryCard from "./components/SummaryCard";
+// import Status from "./components/Status";
+// import ConsistencyTable from "./components/ConsistencyTable";
+// import EncodingTable from "./components/EncodingTable";
+// import PriceChart from "./components/PriceCharts";
+// import DataProfile from "./components/DataProfile";
+
+// function App() {
+//   const [view, setView] = useState("raw");
+
+//   return (
+//     <div className="container">
+
+//       <h1>🚀 Data Preprocessing Dashboard</h1>
+
+//       {/* Top Cards */}
+//       <div className="grid">
+//         <div className="card"><Status /></div>
+//         <div className="card"><SummaryCard /></div>
+//       </div>
+
+//       {/* Toggle */}
+//       <div className="button-group">
+//         <button
+//           className={view === "raw" ? "active" : ""}
+//           onClick={() => setView("raw")}
+//         >
+//           📥 Raw Data
+//         </button>
+//         <button
+//           className={view === "processed" ? "active" : ""}
+//           onClick={() => setView("processed")}
+//         >
+//           ⚙️ Processed Data
+//         </button>
+//       </div>
+
+//       {/* Table */}
+//       <div className="card">
+//         {view === "raw" ? <RawTable /> : <ProcessedTable />}
+//       </div>
+
+//       {/* Chart */}
+//       <div className="card">
+//         <PriceChart />
+//       </div>
+
+//       {/* Analytics */}
+//       <div className="grid">
+//         <ConsistencyTable />
+//         <EncodingTable />
+//       </div>
+
+//       {/* Profile */}
+//       <div className="section">
+//         <DataProfile />
+//       </div>
+
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import { useState } from "react";
+import "./App.css";
+
+import RawTable from "./components/RawTable";
+import ProcessedTable from "./components/ProcessedTable";
+import SummaryCard from "./components/SummaryCard";
+import Status from "./components/Status";
+import PriceChart from "./components/PriceCharts"; // ⚠️ FIX NAME
+import DataProfile from "./components/DataProfile";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [view, setView] = useState("raw");
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
+    <div className="container">
+
+      <h1>🚀 Data Preprocessing Dashboard</h1>
+
+      {/* Top Cards */}
+      <div className="grid">
+        <div className="card"><Status /></div>
+        <div className="card"><SummaryCard /></div>
+      </div>
+
+      {/* Toggle */}
+      <div className="button-group">
         <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          className={view === "raw" ? "active" : ""}
+          onClick={() => setView("raw")}
         >
-          Count is {count}
+          📥 Raw Data
         </button>
-      </section>
 
-      <div className="ticks"></div>
+        <button
+          className={view === "processed" ? "active" : ""}
+          onClick={() => setView("processed")}
+        >
+          ⚙️ Processed Data
+        </button>
+      </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {/* TABLE */}
+      {/* <div className="card">
+        {view === "raw" ? <RawTable /> : <ProcessedTable />}
+      </div> */}
+
+      {/* CHART (optional: show only for processed) */}
+      {view === "processed" && (
+        <div className="card">
+          <PriceChart />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* DATA PROFILE (ONLY THIS — dynamic) */}
+      <div className="section">
+        <DataProfile type={view} />
+      </div>
+
+    </div>
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.routes.data_routes import router as data_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="Dynamic Data Pipeline API",
@@ -7,11 +8,18 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# 🔹 Include routes
+# ✅ CORS (frontend connection)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ✅ Routes
 app.include_router(data_router)
 
-
-# 🔹 Root endpoint
 @app.get("/")
 def home():
     return {
@@ -20,6 +28,8 @@ def home():
             "/api/raw-data",
             "/api/processed-data",
             "/api/summary",
-            "/api/status"
+            "/api/status",
+            "/api/consistency-check",
+            "/api/categorical-encoding"
         ]
     }
